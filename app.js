@@ -9,7 +9,7 @@ const app = express();
 // ✅ Apply CORS First
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://coffee-bean-dev-inventory.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   credentials: true
 }));
