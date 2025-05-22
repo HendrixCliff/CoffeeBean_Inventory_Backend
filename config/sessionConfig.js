@@ -1,3 +1,4 @@
+// config/sessionConfig.js
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const dotenv = require('dotenv');
@@ -9,17 +10,17 @@ const sessionMiddleware = session({
   store: new pgSession({
     conString: process.env.DATABASE_URL,
     tableName: 'session',
-    createTableIfMissing: !isProduction, // Auto-create only in dev
+    createTableIfMissing: !isProduction,
   }),
   secret: process.env.SESSION_SECRET || 'super-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: isProduction,        // True in prod (HTTPS), false in dev (HTTP)
+    secure: isProduction,
     httpOnly: true,
-    sameSite: isProduction ? 'none' : 'lax',  // Cross-origin only if in prod
-    maxAge: 1000 * 60 * 60 * 24  // 1 day
-  }
+    sameSite: isProduction ? 'none' : 'lax',
+    maxAge: 1000 * 60 * 60 * 24,
+  },
 });
 
-module.exports = sessionMiddleware;
+module.exports = sessionMiddleware; // ✅ Make sure this is a function

@@ -21,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set("trust proxy", 1); // Required behind proxies (e.g. Render/Vercel)
 
 // ✅ Session and Passport
-app.use(corsOptions);
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
