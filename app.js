@@ -11,8 +11,7 @@ const app = express();
 // ✅ Apply CORS First
 
 app.use(cors({
-  origin:  'https://coffee-bean-dev-inventory.vercel.app',
-  methods: ['GET', 'POST',  'DELETE', 'PATCH'],
+  origin: 'https://coffee-bean-dev-inventory.vercel.app',
   credentials: true
 }));
 
