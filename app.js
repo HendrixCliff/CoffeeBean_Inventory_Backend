@@ -1,5 +1,7 @@
 const express = require("express")
 const cors = require("cors")
+const dotenv = require("dotenv")
+dotenv.config({path: "./config.env"})
 const session = require('express-session');
 const passport = require("./config/passport")
 const itemRoute = require("./routes/itemRoutes")
@@ -21,13 +23,14 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ THEN session and passport
 // 💾 Required for Passport sessions
 app.use(session({
-  secret: 'yourSecretKey',
+  name: 'sid',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    sameSite: 'none', // <- if frontend is on a different domain
-    secure: true,     // <- true if you're using HTTPS (Render = yes)
-    maxAge: 1000 * 60 * 60 * 48 // 2 day
+    secure: true,           // MUST be true in production (HTTPS)
+    sameSite: 'none',       // Allows cross-origin cookie sharing
+    httpOnly: true
   }
 }));
 
