@@ -13,29 +13,28 @@ const logger = winston.createLogger({
 
 logger.info("🚀 Application starting...");
 
-// Connect to DB
-connectDB();
-
-// Schedule a daily cron job
-cron.schedule("0 0 * * *", () => {
-  logger.info("⏰ Midnight cron task triggered");
-});
-
 // Get port from environment (Render injects process.env.PORT)
-const PORT = process.env.PORT;
-
-if (!PORT) {
-  logger.error("❌ process.env.PORT is not set. Are you running on Render?");
-  process.exit(1);
-}
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 
-server.listen(PORT, '0.0.0.0', () => {
-  logger.info(`✅ Server running on port ${PORT}`);
+// Start DB connection first
+connectDB().then(() => {
+  // Schedule a daily cron job
+  cron.schedule("0 0 * * *", () => {
+    logger.info("⏰ Midnight cron task triggered");
+  });
+
+  // Start the HTTP server
+  server.listen(PORT, "0.0.0.0", () => {
+    logger.info(`✅ Server running on http://0.0.0.0:${PORT}`);
+  });
+}).catch(err => {
+  logger.error(`❌ Failed to connect to DB: ${err.message}`);
+  process.exit(1);
 });
 
-// Optional: Handle unexpected errors gracefully
+// Handle server errors
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
     logger.error(`❌ Port ${PORT} is already in use`);
