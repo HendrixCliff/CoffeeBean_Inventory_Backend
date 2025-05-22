@@ -9,7 +9,7 @@ const app = express();
 // ✅ Apply CORS First
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://coffee-bean-dev-inventory.vercel.app'],
+  origin:  'https://coffee-bean-dev-inventory.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   credentials: true
 }));
@@ -37,11 +37,5 @@ app.use(passport.session());
 app.use("/api/v1/items", itemRoute)
 app.use("/api/v1/auth", authRoute)
 
-app.get("/api/v1/whoami", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json({ user: req.user });
-  } else {
-    res.status(401).json({ message: "Not logged in" });
-  }
-});
+
 module.exports = app
