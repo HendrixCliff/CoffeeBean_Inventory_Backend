@@ -23,7 +23,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: 'yourSecretKey',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    sameSite: 'none', // <- if frontend is on a different domain
+    secure: true,     // <- true if you're using HTTPS (Render = yes)
+    maxAge: 1000 * 60 * 60 * 48 // 2 day
+  }
 }));
 
 app.use(passport.initialize());
