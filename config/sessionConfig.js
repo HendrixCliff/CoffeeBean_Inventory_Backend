@@ -1,29 +1,29 @@
 const session = require('express-session');
-const RedisStore = require('connect-redis'); // ✅ connect-redis@7 exports the class directly
+const RedisStoreFactory = require('connect-redis'); // 👈 this is a function in v5
 const Redis = require('ioredis');
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
-// ✅ Use Redis URL from environment (Upstash style)
+// ✅ Initialize Redis client with Upstash
 const redisClient = new Redis(process.env.UPSTASH_REDIS_URL);
 
-// ✅ Create session store instance directly
-const store = new RedisStore({
-  client: redisClient,
-  prefix: 'sess:',
-});
+// ✅ Pass express-session into RedisStoreFactory to get RedisStore
+const RedisStore = RedisStoreFactory(session);
 
 // ✅ Create session middleware
 const sessionMiddleware = session({
-  store,
+  store: new RedisStore({
+    client: redisClient,
+    prefix: 'sess:',
+  }),
   secret: process.env.SESSION_SECRET || 'super-secret-dont-hardcode-me',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',  // Use HTTPS
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'none',                               // Needed for cross-domain cookies
-    maxAge: 1000 * 60 * 60 * 24                     // 1 day
+    sameSite: 'none',
+    maxAge: 1000 * 60 * 60 * 24,
   }
 });
 
