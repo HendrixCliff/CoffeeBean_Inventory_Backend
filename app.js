@@ -2,32 +2,13 @@
 const express = require("express");
 const cors = require("cors");
 const { createClient } = require("redis");
-const sessionMiddleware = require('./config/sessionConfig');
+const session = require('./config/sessionConfig');
 const passport = require("./config/passport");
 const itemRoute = require("./routes/itemRoutes");
 const authRoute = require("./routes/userRoutes");
 
 const app = express();
 
-// ✅ Redis Client for Counter
-const redisClient = createClient({
-  url: process.env.REDIS_URL,
-  socket: {
-    tls: true,
-    rejectUnauthorized: false, // ⚠️ Only for Upstash or Fly.io
-  },
-});
-
-redisClient.on("error", (err) => console.error("❌ Redis Client Error", err));
-
-(async () => {
-  try {
-    await redisClient.connect();
-    console.log("✅ Connected to Redis!");
-  } catch (err) {
-    console.error("🚨 Redis connection failed:", err);
-  }
-})();
 
 // ✅ Middleware Setup
 app.use(cors({
@@ -40,9 +21,10 @@ app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1); // For secure cookies in production on Render
 
 // ✅ Session and Passport
-app.use(sessionMiddleware); // uses Upstash/Fly.io Redis store inside
+app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // ✅ Routes
 app.use("/api/v1/items", itemRoute);
