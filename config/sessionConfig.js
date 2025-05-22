@@ -3,7 +3,7 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const dotenv = require('dotenv');
 
-dotenv.config();
+dotenv.config({path: "./config.env"});
 
 const sessionMiddleware = session({
   store: new pgSession({

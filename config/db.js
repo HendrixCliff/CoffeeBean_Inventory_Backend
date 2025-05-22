@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const winston = require("winston");
+const dotenv = require("dotenv")
+dotenv.config({path: "./config.env"});
 
 const connectDB = async () => {
   const MONGO_URI = process.env.MONGO_URI;
