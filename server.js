@@ -16,23 +16,8 @@ logger.info("🚀 Application starting...");
 // Get port from environment (Render injects process.env.PORT)
 const PORT = process.env.PORT || 9000;
 
+// Create HTTP server
 const server = http.createServer(app);
-
-// Start DB connection first
-connectDB().then(() => {
-  // Schedule a daily cron job
-  cron.schedule("0 0 * * *", () => {
-    logger.info("⏰ Midnight cron task triggered");
-  });
-
- 
-  server.listen(PORT,  () => {
-    logger.info("Running");
-  });
-}).catch(err => {
-  logger.error(`❌ Failed to connect to DB: ${err.message}`);
-  process.exit(1);
-});
 
 // Handle server errors
 server.on("error", (err) => {
@@ -43,3 +28,23 @@ server.on("error", (err) => {
   }
   process.exit(1);
 });
+
+// Connect to DB and then start server
+connectDB()
+  .then(() => {
+    logger.info("✅ DB connected successfully");
+
+    // Schedule a daily cron job
+    cron.schedule("0 0 * * *", () => {
+      logger.info("⏰ Midnight cron task triggered");
+    });
+
+    // Start server
+    server.listen(PORT, () => {
+      logger.info(`✅ Server running and listening on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    logger.error(`❌ Failed to connect to DB: ${err.message}`);
+    process.exit(1);
+  });
