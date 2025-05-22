@@ -1,10 +1,13 @@
 const session = require('express-session');
 const RedisStoreLib = require('connect-redis');
-const RedisStore = RedisStoreLib.default;
+const RedisStoreFactory = require('connect-redis').default;
 const Redis = require('ioredis');
 
 // ✅ Use your Upstash Redis connection string directly (no duplicate)
 const redisClient = new Redis("rediss://default:AZfPAAIjcDExYTFhMjlmN2JiNWE0NmQ1OWM2MjExZWZkNmYzMWUxYnAxMA@obliging-mouse-38863.upstash.io:443");
+
+// Create RedisStore by passing in session
+const RedisStore = RedisStoreFactory(session);
 
 const sessionMiddleware = session({
   store: new RedisStore({ client: redisClient }),
