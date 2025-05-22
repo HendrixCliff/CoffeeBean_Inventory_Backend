@@ -14,7 +14,7 @@ const logger = winston.createLogger({
 logger.info("🚀 Application starting...");
 
 // Get port from environment (Render injects process.env.PORT)
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
 
 const server = http.createServer(app);
 
@@ -25,9 +25,9 @@ connectDB().then(() => {
     logger.info("⏰ Midnight cron task triggered");
   });
 
-  // Start the HTTP server
-  server.listen(PORT, "0.0.0.0", () => {
-    logger.info(`✅ Server running on http://0.0.0.0:${PORT}`);
+ 
+  server.listen(PORT,  () => {
+    logger.info("Running");
   });
 }).catch(err => {
   logger.error(`❌ Failed to connect to DB: ${err.message}`);
