@@ -10,7 +10,7 @@ const app = express();
 // ✅ Dynamic CORS origin checking (supports multiple domains + tools like Postman)
 const allowedOrigins = [
   "https://coffee-bean-dev-inventory.vercel.app",
-  "http://localhost:5173" // optional for local dev/testing
+  "http://localhost:5173/" // optional for local dev/testing
 ];
 
 const corsOptions = {
@@ -22,7 +22,7 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
