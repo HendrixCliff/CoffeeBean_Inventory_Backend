@@ -1,7 +1,6 @@
 // app.js
 const express = require("express");
 const cors = require("cors");
-const { createClient } = require("redis");
 const session = require('./config/sessionConfig');
 const passport = require("./config/passport");
 const itemRoute = require("./routes/itemRoutes");
@@ -31,6 +30,3 @@ app.use("/api/v1/items", itemRoute);
 app.use("/api/v1/auth", authRoute);
 
 
-// ✅ Server listen
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
