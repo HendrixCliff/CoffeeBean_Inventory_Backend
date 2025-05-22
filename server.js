@@ -22,7 +22,7 @@ const server = http.createServer(app);
 connectDB();
 
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 9001;
 server.listen(PORT, () => {
 });
 

@@ -30,18 +30,6 @@ app.use(passport.session());
 app.use("/api/v1/items", itemRoute);
 app.use("/api/v1/auth", authRoute);
 
-// ✅ Counter route (Example usage of redisClient)
-app.get("/", async (req, res) => {
-  try {
-    const value = parseInt(await redisClient.get("counter")) || 0;
-    const newValue = value + 1;
-    await redisClient.set("counter", newValue);
-    res.send(`👋 Hello, visitor number ${newValue}!`);
-  } catch (err) {
-    console.error("Redis error:", err);
-    res.status(500).send("Something went wrong 😵‍💫");
-  }
-});
 
 // ✅ Server listen
 const PORT = process.env.PORT || 3000;
