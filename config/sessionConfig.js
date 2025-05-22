@@ -1,24 +1,29 @@
 const session = require('express-session');
-const RedisStoreLib = require('connect-redis');
-const RedisStoreFactory = require('connect-redis').default;
+const RedisStore = require('connect-redis'); // ✅ connect-redis@7 exports the class directly
 const Redis = require('ioredis');
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config.env" });
 
-// ✅ Use your Upstash Redis connection string directly (no duplicate)
-const redisClient = new Redis("rediss://default:AZfPAAIjcDExYTFhMjlmN2JiNWE0NmQ1OWM2MjExZWZkNmYzMWUxYnAxMA@obliging-mouse-38863.upstash.io:443");
+// ✅ Use Redis URL from environment (Upstash style)
+const redisClient = new Redis(process.env.UPSTASH_REDIS_URL);
 
-// Create RedisStore by passing in session
-const RedisStore = RedisStoreFactory(session);
+// ✅ Create session store instance directly
+const store = new RedisStore({
+  client: redisClient,
+  prefix: 'sess:',
+});
 
+// ✅ Create session middleware
 const sessionMiddleware = session({
-  store: new RedisStore({ client: redisClient }),
+  store,
   secret: process.env.SESSION_SECRET || 'super-secret-dont-hardcode-me',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // 🔐 works with HTTPS
+    secure: process.env.NODE_ENV === 'production',  // Use HTTPS
     httpOnly: true,
-    sameSite: 'none', // 🌐 needed if frontend is on another domain
-    maxAge: 1000 * 60 * 60 * 24 // 1 day
+    sameSite: 'none',                               // Needed for cross-domain cookies
+    maxAge: 1000 * 60 * 60 * 24                     // 1 day
   }
 });
 
