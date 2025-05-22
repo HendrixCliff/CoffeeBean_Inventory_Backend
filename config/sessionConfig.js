@@ -1,11 +1,9 @@
-// sessionConfig.js
 const session = require('express-session');
 const RedisStoreLib = require('connect-redis');
+const RedisStore = RedisStoreLib.default;
 const Redis = require('ioredis');
 
-const RedisStore = RedisStoreLib(session);
-
-// ✅ Using your provided secure Redis URL from Upstash
+// ✅ Use your Upstash Redis connection string directly (no duplicate)
 const redisClient = new Redis("rediss://default:AZfPAAIjcDExYTFhMjlmN2JiNWE0NmQ1OWM2MjExZWZkNmYzMWUxYnAxMA@obliging-mouse-38863.upstash.io:443");
 
 const sessionMiddleware = session({
@@ -14,9 +12,9 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production', // 🔐 works with HTTPS
     httpOnly: true,
-    sameSite: 'none', // Cross-site cookies (for frontend-backend on diff domains)
+    sameSite: 'none', // 🌐 needed if frontend is on another domain
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 });
