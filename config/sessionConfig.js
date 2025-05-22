@@ -1,6 +1,6 @@
 // config/sessionConfig.js
 const session = require('express-session');
-const RedisStore = require('connect-redis');
+const { RedisStore } = require('connect-redis');
 const Redis = require('ioredis');
 const dotenv = require("dotenv");
 
