@@ -10,10 +10,7 @@ const connectDB = async () => {
   }
 
   try {
-    await mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(MONGO_URI);
     winston.info("✅ MongoDB connected successfully");
   } catch (err) {
     winston.error(`❌ MongoDB connection error: ${err.message}`);
