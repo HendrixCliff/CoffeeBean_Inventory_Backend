@@ -1,9 +1,9 @@
 const session = require('express-session');
 const RedisStoreFactory = require('connect-redis').default;
 const Redis = require('ioredis');
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: './config.env' });
 
 const redisClient = new Redis(process.env.UPSTASH_REDIS_URL);
 
@@ -18,7 +18,7 @@ const sessionMiddleware = session({
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     sameSite: 'none',
-    maxAge: 1000 * 60 * 60 * 24,
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
   },
 });
 
