@@ -1,23 +1,24 @@
-// sessionConfig.js
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
 
-dotenv.config({path: "./config.env"});
+const isProduction = process.env.NODE_ENV === 'production';
 
 const sessionMiddleware = session({
   store: new pgSession({
     conString: process.env.DATABASE_URL,
-    tableName: 'session'
+    tableName: 'session',
+    createTableIfMissing: !isProduction, // Auto-create only in dev
   }),
   secret: process.env.SESSION_SECRET || 'super-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,           // Required for SameSite: 'none'
+    secure: isProduction,        // True in prod (HTTPS), false in dev (HTTP)
     httpOnly: true,
-    sameSite: 'none',       // Required for cross-origin cookies (Vercel <-> Render)
-    maxAge: 1000 * 60 * 60 * 24 // 1 day
+    sameSite: isProduction ? 'none' : 'lax',  // Cross-origin only if in prod
+    maxAge: 1000 * 60 * 60 * 24  // 1 day
   }
 });
 
