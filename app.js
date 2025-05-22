@@ -10,7 +10,7 @@ const app = express();
 
 app.use(cors({
   origin:  'https://coffee-bean-dev-inventory.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  methods: ['GET', 'POST',  'DELETE', 'PATCH'],
   credentials: true
 }));
 
