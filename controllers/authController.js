@@ -131,7 +131,7 @@ exports.restrict = (role) => {
      const resetToken = user.createResetPasswordToken();
     await user.save({ validateBeforeSave: false });
 
-    const frontendBaseUrl = 'https://coffee-bean-dev-inventory.vercel.app/';
+    const frontendBaseUrl = 'https://coffee-bean-dev-inventory.vercel.app';
     const resetUrl = `${frontendBaseUrl}/reset-password/${resetToken}`;
 
       try {
