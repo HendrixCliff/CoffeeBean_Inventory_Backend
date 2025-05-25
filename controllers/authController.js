@@ -34,6 +34,11 @@ exports.signup = asyncErrorHandler(async (req, res, next) => {
       return next(new CustomError("Email is already in use", 409));
     }
 
+     if (!name || typeof name !== 'string' || name.trim().length === 0) {
+      console.warn("⚠️ Invalid username submitted:", name);
+      return next(new CustomError("Username is required and cannot be empty", 400));
+    }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 12);
 
